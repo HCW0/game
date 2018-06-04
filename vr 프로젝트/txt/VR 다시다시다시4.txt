@@ -1,0 +1,64 @@
+삼성 vr 컨트롤러의 등록 및 레이저 추가.
+
+
+
+트리거는 머 등록했으니까 어떻게든 작동할테고..
+
+
+
+
+	1. OVRCameraRig 프리팹의 hierarchy 추가
+
+	2. 기존의 MainCamera를 OVR Rig에 등록후 이름을 CenterEyeAnchor로 바꿔 기존의 center와
+	교체한다.
+
+	3. tracked remote를 left hand anchor 및 right hand anchor에 각각 추가하고
+	내부 열거형 값을 인스펙터에서 L R에 각각 맞춰준다.
+
+
+	// 여기까지 기본
+
+
+	4. 레이저 추가 하는 스크립트의 작성
+
+	
+
+
+!! 트랙킹 스페이스의 정체
+
+
+            if (ControllerIsConnected && m_TrackingSpace != null) {
+                    Matrix4x4 localToWorld = m_TrackingSpace.localToWorldMatrix;
+                    Quaternion orientation = OVRInput.GetLocalControllerRotation (Controller);
+            
+                    Vector3 localStartPoint = OVRInput.GetLocalControllerPosition (Controller);
+                    Vector3 localEndPoint = localStartPoint + ((orientation * Vector3.forward) * 500.0f);
+                    
+                worldStartPoint = localToWorld.MultiplyPoint(localStartPoint);
+                worldEndPoint = localToWorld.MultiplyPoint(localEndPoint);
+                
+                // Create new ray
+                ray = new Ray(worldStartPoint, worldEndPoint - worldStartPoint);
+            }
+
+
+
+별도로 호모지니어스 좌표계를 사용하는 것으로 보인다.
+
+
+
+
+레이저에 RETICLE 추가하기
+
+
+	현재 컨트롤러가 어디에 포커스를 두는지, 어느 범위에 충돌하고 있는지 보여주는 용도로 원판(Reticle)을 달아줘야 한다.
+
+	Reticle.cs 를 열어서 SetPosition() 함수에 파라미터를 추가한 SetPosition(Vector3 space, Vector3 direction) 오버로딩을 추가해준다.
+
+
+
+
+	
+
+
+	

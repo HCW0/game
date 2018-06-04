@@ -1,0 +1,163 @@
+
+
+
+유니티 VR 초급
+
+
+다시 다시 다시 정리(3번째)
+
+
+
+	
+
+
+가장 기본적인 프로젝트 세팅
+
+
+	1. project setting - > player setting - > [Virtual reality supported] check
+
+	
+	** 런타임에서 수행하기
+
+
+		VRSettings.enalbed = bool
+		위 프로퍼티를 수정하는 것으로 가능..
+
+		어따 쓰지..
+
+
+
+
+	2. dk2(오큘러스 기기) 혹은 GearVR의 경우에는 USB 디버깅 후에 build and run 혹은 unity
+	remote 5 등으로 에디터 화면을 폰과 동기화 시켜 볼 수 있다.
+
+
+
+
+	3. 컴파일 옵션
+
+		player setting => vr supported에 oculus sdks 추가.
+		기어 vr을 사용하는 경우에는 oculus signature 파일 필요.
+		
+
+
+
+
+	4. 권한 팝업 등의 해제
+
+To do this, create a new file Assets/Plugins/Android/AndroidManifest.xml with the following content:
+
+ 	<?xml version="1.0" encoding="utf-8" standalone="no"?>
+	<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    	<application>
+        	<activity android:configChanges="locale|fontScale|keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode" android:launchMode="singleTask" android:name="com.unity3d.player.UnityPlayerActivity" android:excludeFromRecents="true">
+            	<intent-filter>
+                	<action android:name="android.intent.action.MAIN"/>
+                	<category android:name="android.intent.category.INFO"/>
+            	</intent-filter>
+        	</activity>
+        	<meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="true" />
+    	</application>
+	</manifest>
+
+
+
+	
+
+
+** 유니티VR 개발시 주의해야할 점 
+
+
+	일반 프로젝트 개발과는 다르게 몇 가지 주의해야할 사항이 있다.
+
+
+		1. Frame Rate
+
+			유니티 IDE의 에디터에서 조금 느리다고 느껴질 수 있는데
+
+			똑같은 컨텐츠를 두번씩 렌더링하므로 그런 것이고 실제 런타임 환경에서는
+
+			렉에 없을수도 있다. 가장 좋은방법은 수시로 타겟 디바이스에서 돌려보고 확인하는 일.
+
+
+
+		2. 카메라의 이동
+
+			카메라를 직접 움직여서는 정상동작 안하고, 다른 오브젝트의 자손 형태로
+
+			OVR 프리팹을 추가시켜 같이 움직이도록 해야한다는 듯.
+
+
+
+		3. 이미지 이펙트
+
+			VR 프로젝트에서 이미지 이펙트는 코스트가 크게 적용된다.
+			2번씩 찍으니까.
+
+			또한, 모션벡터 등의 카메라와 연동하는 동적 이펙트의 경우에는
+			VR 동작에서 카메라가 2개 쓰이는 관계로 생각대로 동작하지
+			않을 수도 있다.
+
+			예를 들어 depth of field 나 모션 블러나 블룸이나
+			그런 것들이 특별한 효과에 더해 심각한 side effect
+			(눈뽕이나 심각한 디바이스 과열 및 폭발) 등을 일으킬 수 있으므로
+
+			역시 수시로 체크하면서 퍼포먼스가 떨어지는지 아니면 다른 문제를
+			야기하는지 아니면 검증된 이펙트만 쓰던지 해야한다.
+
+
+		
+		4. 렌더링 스케일
+
+			texel(텍스처의 픽셀)에 대한 pixel ratio 수치를 변경하는 것으로
+			복잡한 Scene의 경우 부하를 줄이거나 간단한 Scene의
+			경우 쿼리티를 올리거나 할 수 있다.
+
+낮은 해상도에서 높은 해상도로 갈수록 게임의 그래픽이 더욱 깔끔해지는 이유는 바로 픽셀 포인트의 수가 매우 많아지기 때문이다. 쉽게 말해, 10개의 픽셀포인트로 표현할 그래픽을 30개로 표현한다면 당연히 그래픽이 조밀해져, 10개로 표현할때보다 깔끔해 보인다.
+
+기본값 1은 텍셀당 픽셀이 1:1 즉 100퍼센트라는 것이고 2를 주면 그 2배 200퍼센트.. 식으로 pixel ratio가 증가한다.
+
+정확한 원리는
+
+렌더링 스케일은 말그대로 스케일(해상도)대로 렌더링해서 표현해주는 옵션이라고 생각하면 이해하기 쉽다. 앞서 이야기 한대로 FHD 해상도에서 200%로 설정한뒤 게임을 한다면, 3840x2160 해상도 맞게 그래픽을 연산,렌더링한뒤에, FHD 화면으로 다운 사이즈해서 보여주는 옵션이라고 보면 된다.
+
+물론 오리지날로 4K 렌더링후에 4K디스플레이에다가 뿌려주는 그래픽과 비교하면 4K로 렌더링 했더라도 FHD 화면에서 보는것이라 분명 어느정도 차이가 나지만, FHD의 100%와 200%는 일반사람의 눈으로도 보더라도 그 차이를 쉽게 볼 수 있다.
+
+와 같다.(http://www.kbench.com/?q=node/167894)
+
+			스크립트 제어를 통해서만 설정이 가능하며	
+			
+		VRSettings.renderScale = m_RenderScale; 와 같다.
+
+개발 환경
+
+
+	하드웨어
+
+		DK2는 75fps, 기어VR은 60fps
+		만약 각 기기에서 권장하는 프레임레이트보다 저조한 프레임레이트를 보여주면 멀미를 일으킬정도로
+		퍼포먼스 저하가 생기는 걸 감지할 수 있다 한다.
+
+			
+		DK2는 현재 35만원 정도... 돈생기면 사자.	
+
+
+
+
+
+
+
+
+
+
+
+
+
+관련 클래스
+
+	InputTracking 클래스
+
+	VRInput(기어vr 등)에서 카메라 등이 위치해야할 정보를 가져와서 그 값을
+
+	leftEye.transform.localPosition = InputTracking.GetLocalPosition(VRNode.LeftEyeAnchor) 식으로 갱신시키는 놈인듯.
+

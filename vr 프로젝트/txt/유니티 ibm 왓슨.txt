@@ -1,0 +1,154 @@
+유니티 왓슨 https://www.youtube.com/watch?v=_K62R9Jnxag&list=PLZDyxLlNKRY8MdgiUq45cZztn_f0EVz6c&index=4
+
+// speech recog
+
+1. 기트허브에 올라와 있는 unity sdk 를 다운한다.
+프로젝트에 임포트 해준다.
+
+2. ibm 클라우드에 가입하고 api key를 생성한다.
+(사용하고 싶은 서비스를 고르면 됨.)
+
+3. 그러면 각 서비스 별로 id와 pw가 생성되는데 옆의 copy 버튼을 눌러
+
+1에서 사용하고 싶었던 클래스를 열어서 id pw에 아까 복사한 값을 집어넣는다.
+
+조금 시간이 지나면 작동을 시작한다.
+
+
+4. 해당 튜토리얼에선 speech to text를 다루고 있는데, Example Streaming 이라는 프리팹을 활성화 시키고, 인스펙터 창의 id pw url을 채우면 된다.
+
+
+
+** speecj to text 내부에 보면
+
+private data 항목에
+
+        private string _recognizeModel = "ko-KR_BroadbandModel";   // ID of the model to use.
+
+가 있는데,
+
+https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/#get_model
+
+를 참조해서 작당한 스피치 모델을 바꿔주면 그 언어를 인식하게 되다.
+
+
+
+
+// lang transfer
+
+1. private LanguageTranslator _translator; 라는 클래스를 사용하여, 언어 변환이 가능한데
+
+해당 클래스를 통해 인스턴스를 만드려면 ibm 클라우드의 계정 정보가 필요하다
+
+계정정보를 넘기려면 Credentials 라는 클래스를 사용한다.
+
+2. 다음과 같이 코드를 작성한다.
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using IBM.Watson.DeveloperCloud.Services.LanguageTranslator.v2;
+using IBM.Watson.DeveloperCloud.Logging;
+using IBM.Watson.DeveloperCloud.Utilities;
+
+
+public class k514LanguageTransferDemo : MonoBehaviour {
+
+	public Text transerTarget;
+
+	private LanguageTranslator _translator;
+	private string _translateModel = "en-es";
+
+	// Use this for initialization
+	void Start () {
+		LogSystem.InstallDefaultRectors();
+
+		// api key 정보를 등록하는 코드
+		Credentials languageTranslatorCredentials = new Credentials(){
+			// 초기화 리스트 사용
+			Username = "cc200026-f02c-47ed-9d29-c5afb42db7fa",
+			Password = "Zh86XCZRAp6v",
+			Url = "https://gateway.watsonplatform.net/language-translator/api"
+		};
+
+		_translator = new LanguageTranslator(languageTranslatorCredentials);
+
+	}
+	
+}
+
+
+
+
+
+
+
+
+번역은 프로미스 패턴으루 진행된다.
+
+using IBM.Watson.DeveloperCloud.Connection;
+
+
+
+		// 번역 성공시 콜백함수
+	public void OnTranslate(Translations response,Dictionary<string,object> customData){
+		transerTarget.text = response.translations[0].translation;
+	}
+
+	// 번역 실패시 콜백함수
+	// rest란 Representational State Transfer를 말하는 것으로
+	// http를 통해서 json 같은 데이터를 잘 보내기 위한 네트워크 기반 아키텍처를
+	// 말한다.
+	public void OnFail(RESTConnector.Error error,Dictionary<string,object> customData){
+		Log.Debug("Error occured : getTranslate Onfail callbacks", "Error Info : {0}"
+			, error.ToString()
+		);
+	}
+
+
+
+
+
+일단 완성하면, '어떤 string이 주어지면 그걸 번역해주는 기능'이 완성된다
+
+이를 speech to text안에 넣어주면
+
+우리가 입력한 말을 번역해주는 프로그램이 되는 것이다.
+
+
+
+ex streaming 내부에 
+
+OnRecognize 콜백 메서드에
+
+              // custom comment
+                    ResultsField.text = text;
+                    langTransfer.Translate(alt.transcript);
+
+를 추가한다.
+
+
+
+* translate model
+
+	https://console.bluemix.net/docs/services/language-translator/translation-models.html#japanese
+
+
+
+
+
+
+
+
+
+
+** voice generator
+
+sdk 내부의 것을 참조하면 된다.
+
+좀 복잡한 것이 xml 형태로 억양이나 읽는 방식등을 지정하고 있기 때문에
+
+가장 까다로운 작업이 될 것 같다.
+
+동작은 정상작동한다.

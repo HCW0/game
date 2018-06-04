@@ -1,0 +1,187 @@
+유니티에서 지원하는 VR Sample에 대해 :
+
+
+VR게임을 만드려면
+
+	1. 지금 처다보는 오브젝트 혹은 컨트롤러로 지시하고 있는 오브젝트와 상호작용
+
+
+위의 것을 구현하면 나머지는 상호작용 메서드를 만들고, 꾸미는 것으로 게임의 1/3은 완성했다고 볼 수 있다.
+
+그리고 위 1을 구현하도록 지원하는 3가지의 s컴포넌트가 있는데 그게 바로
+
+
+	1. VREyeRayCaster
+	2. VRInput
+	3. VRInteractiveItem
+
+이름부터 어느정도 역할을 떠올릴 수 있다.
+
+
+
+
+1. VREyeRayCaster
+
+	
+
+	카메라, 혹은 컨트롤러에 붙이는 s컴포넌트
+
+	레이캐스트를 수행해서 충돌검증된 오브젝트에 대해 위에서 언급된 VRInteractiveITem
+	을  찾아가져오는 기능을 수행한다.
+
+
+2. VRInput
+
+	HMD에서 스와이프나 탭이나 더블 탭등이 발생한 경우 관련 이벤트를 핸들링하는 스크립트이다.
+
+	내부에는 event로 Action OnClick 등이 들어있고
+
+	delegate를 던지듯이 특정 콜백함수를 추가/삭제하여 제어하면 된다.
+
+
+예씨 ::
+
+	    public delegate void ClickAction();
+    public static event ClickAction OnClicked;
+
+    void OnEnable()
+    {
+        EventManager.OnClicked += Teleport;
+    }
+    
+    
+    void OnDisable()
+    {
+        EventManager.OnClicked -= Teleport;
+    }
+    
+    
+    void Teleport()
+    {
+        Vector3 pos = transform.position;
+        pos.y = Random.Range(1.0f, 3.0f);
+        transform.position = pos;
+    }
+
+
+
+//**
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class NewBehaviourScript : MonoBehaviour {
+
+	public bool trig = false;
+
+	private delegate void OnTrig(int x);
+	private event OnTrig OnTrigEvent;
+	
+	// Update is called once per frame
+	void Update () {
+			if(trig){
+				trig = false;
+				OnTrigEvent += new OnTrig(Beep);
+				OnTrigEvent += (int x)=>{
+					// lamda beep
+					Debug.Log("Beep"+x);
+				};
+				OnTrigEvent(3);
+			}
+	}
+
+	void Beep(int x){
+		Debug.Log("Beep"+x);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+********** Action 버전
+
+using System.Collections;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class NewBehaviourScript : MonoBehaviour {
+
+	public bool trig = false;
+
+	private event Action<int> OnTrigEvent;
+	
+	// Update is called once per frame
+	void Update () {
+			if(trig){
+				trig = false;
+				OnTrigEvent += new Action<int>(Beep);
+				OnTrigEvent += delegate(int x){
+					// lamda beep
+					Debug.Log("Beep"+x);
+				};
+				OnTrigEvent += (int x)=>{
+					// lamda beep
+					Debug.Log("Beep"+x);
+				};
+				OnTrigEvent(3);
+			}
+	}
+
+	void Beep(int x){
+		Debug.Log("Beep"+x);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3. VRInteractiveItem
+
+역시 비슷한 event로 구성되어 있다.
+
+IsOver 라는 읽기전용 public 논리변수도 존재한다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

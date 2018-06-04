@@ -1,0 +1,22 @@
+유니티 VR 챗봇
+
+
+
+
+1. 왓슨에서 라이트버전이면 무료로 가능
+
+2. watson assistant 혹은 챗봇 만들기 해서 어찌저찌 타고 들어가면 workspace 만드는 공간에 도달
+
+3. https://developer.ibm.com/kr/watson/2017/01/13/watsonchatbot-1-watson-conversation/ 참조
+
+
+
+4. Workspace는 어플리케이션이 사용하는 단위입니다. 하나의 Watson Conversation Service 인스턴스 안에 여러 Workspace를 생성할 수 있습니다.
+Workspace는 다음과 같은 타입의 artifact로 이루어집니다.
+Intent : Intent는 사용자가 하려는 말의 목적을 의미합니다. 따라서 우리는 서비스에서 제공하고자 하는 요청의 모든 타입을 Intent로 정의하게 됩니다. 예를들어 회의실 예약은 하나의 Intent가 될 수 있습니다. Watson Conversation에서 Intent를 지칭할 때에는 #을 prefix로 사용합니다. Intent를 정의할 때에는 사용자가 이 Intent를 목적으로 말을 할 때 사용할 가능성이 있는 최대한 많은 예시를 제공하는 것이 좋습니다. 예를 들어 회의실 예약이라는 Intent에는 “회의실 예약해주세요.”, “지금 빈 회의실이 있나요?” 등의 예시를 제공할 수 있습니다.
+Entity : Entity는 Intent와 관련된 용어 또는 목적어를 의미합니다. Entity는 Intent에 대해 구체적인 문맥(Context)을 제공하는데에 쓰입니다. 예를 들어 회의실 예약이라는 Intent를 사용하기 위해서는 회의실 이라는 Entity를 정의할 수 있습니다. 회의실 Entity에는 실제로 보유중인 회의실 이름을 담으면 됩니다. 이렇게 Entity를 정의하면 사용자가 “진달래 회의실 지금 비어 있어?” 라고 했을 때 회의실 Entity의 값이 “진달래”로 리턴되게 됩니다.
+Dialog : Dialog는 대화의 흐름을 분기하는 것으로 어플리케이션이 정의된 Intent와 Entity를 인식했을 때 어떠한 응답을 할 것인지를 정의합니다. 다시 말하면 사용자가 대화를 시도했을 때 이 대화의 Intent와 Entity를 파악한 후 어떠한 응답을 할 것인지를 정의합니다.
+
+
+
+

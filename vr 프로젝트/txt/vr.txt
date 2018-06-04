@@ -1,0 +1,17 @@
+vr 깨달은 점
+
+
+
+
+1. 스토어 키 를 만들어야 함.
+2. 텍스처 포맷을 바꿔줘야 함.
+3. 모든 씬의 메인 카메라를 삭제하고 ovr 카메라 리그로 대체시켜야만 함.
+4. 왠지 UI가 표시되지 않는다.
+
+
+AIzaSyBxQV5I8EVKWHT6-BB9uVsq_u0pdubHqGM
+
+
+
+            ko_KR,  ja_JP,  en_US
+

@@ -1,0 +1,32 @@
+{
+  "url": "https://gateway.watsonplatform.net/natural-language-understanding/api",
+  "username": "25d05854-03f9-4553-bcc2-d07872fb0cb2",
+  "password": "DXCUqJ8JX8Yu"
+}
+
+
+
+credential
+
+
+  "url": "https://gateway.watsonplatform.net/assistant/api",
+  "username": "c909f731-92f1-4464-8e6a-54b06a310a6c",
+  "password": "uWqSWU5NjFsw"
+
+
+
+assistant 라이브러리 이용
+
+
+
+워크스페이스 아이디는 실제 워크스페이스의 두번째 탭에 존재
+
+71353a1e-d8a4-4126-8745-59afb102e5ec
+
+
+
+
+
+스토어에 있는 왓슨 api 존나 구버전이다.
+
+깃헙 쓸것 이거땜애 1일 날림 씨빨
